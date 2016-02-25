@@ -7,6 +7,15 @@ webpage = requests.get('http://www.studentlunch.fi')
 webpage.raise_for_status()
 parsed_webpage = bs4.BeautifulSoup(webpage.text, "html.parser")
 ##type(parsed_webpage)
+
+restaurants = parsed_webpage.select(".lunch-item") # Picks out all the restaurants
+# print restaurants[0].getText()
+# arkenfood = restaurants[0].select(".food")
+
+for x in range(len(restaurants)):
+	print restaurants[x]
+
+"""
 allfoods = parsed_webpage.select(".food")
 
 # Print out all food, without restaurant name
@@ -18,7 +27,7 @@ for x in range(len(allfoods)): # For 0 to amount of entries in variable allfoods
 		print fooditem[:-1]			# ...and remove it if it does
 	else:
 		print fooditem
-
+"""
 # print allfoods[0].getText()
 
 ## Ersatt med requests?
