@@ -3,13 +3,23 @@
 import bs4
 import requests
 
-res = requests.get('http://www.studentlunch.fi')
-res.raise_for_status()
-noStarchSoup = bs4.BeautifulSoup(res.text, "html.parser")
-##type(noStarchSoup)
-allfoods = noStarchSoup.select(".food")
+webpage = requests.get('http://www.studentlunch.fi')
+webpage.raise_for_status()
+parsed_webpage = bs4.BeautifulSoup(webpage.text, "html.parser")
+##type(parsed_webpage)
+allfoods = parsed_webpage.select(".food")
 
-print allfoods[0].getText()
+# Print out all food, without restaurant name
+for x in range(len(allfoods)): # For 0 to amount of entries in variable allfoods
+	
+	fooditem = allfoods[x].getText()	# Put current food into string for checking
+	
+	if fooditem.endswith('*'):		# Check if fooditem has * at the end...
+		print fooditem[:-1]			# ...and remove it if it does
+	else:
+		print fooditem
+
+# print allfoods[0].getText()
 
 ## Ersatt med requests?
 """ import urllib
@@ -30,8 +40,10 @@ sock.close()
 
 ## Hosting?
 
+""" Dictionary med restauranger som keys som pekar pa matlistorna?
 
-
+lunch = {"Arken":[],"Fanriken":[],"Gado",[],"Hanken":[],"Karen up":[],"Karen down":[]}
+"""
 
 
 """ import requests
