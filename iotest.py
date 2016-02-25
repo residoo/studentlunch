@@ -1,3 +1,4 @@
+# iotest.py
 # -*- coding: UTF-8 -*-
 
 import bs4 # http://www.crummy.com/software/BeautifulSoup/bs4/doc/
@@ -20,7 +21,7 @@ parsed_webpage = bs4.BeautifulSoup(webpage.text, "html.parser")
 
 restaurants = parsed_webpage.select(".lunch-item") # Picks out all the restaurants
 
-whatrestaurant = = raw_input("0. Arken\n1. Fanriken\n2. Gado\n3. Hanken\n4. Karen up\n5. Karen down\n>")
+whatrestaurant = input("0. Arken\n1. Fanriken\n2. Gado\n3. Hanken\n4. Karen up\n5. Karen down\n>")
 
 allfoods = restaurants[whatrestaurant].select(".food")
 

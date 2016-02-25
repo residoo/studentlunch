@@ -8,13 +8,38 @@ webpage.raise_for_status()
 parsed_webpage = bs4.BeautifulSoup(webpage.text, "html.parser")
 ##type(parsed_webpage)
 
-restaurants = parsed_webpage.select(".lunch-item") # Picks out all the restaurants
+# restaurants = parsed_webpage.select(".lunch-item") # Picks out all the restaurants
 # print restaurants[0].getText()
 # arkenfood = restaurants[0].select(".food")
 
+"""
 for x in range(len(restaurants)):
 	print restaurants[x]
+"""
 
+food = parsed_webpage.select(".lunch-item-food .food")
+foodprint = food[1].getText()
+print foodprint.encode('utf-8')
+
+"""
+# for x in range(len(parsed_webpage.select("lunch-item"))):
+for x in range(6):
+	food[x] = parsed_webpage.select("lunch-item:nth-of-type(x) .food")
+	print x
+"""
+	
+"""	
+for x in range(len(food[0])): # For 0 to amount of entries in variable allfoods
+	
+	fooditem = food[x].getText()	# Put current food into string for checking
+	
+	if fooditem.endswith('*'):		# Check if fooditem has * at the end...
+		print fooditem[:-1]			# ...and remove it if it does
+	else:
+		print fooditem
+"""
+		
+		
 """
 allfoods = parsed_webpage.select(".food")
 
