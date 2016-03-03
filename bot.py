@@ -20,10 +20,14 @@ webpage.raise_for_status()
 parsed_webpage = bs4.BeautifulSoup(webpage.text, "html.parser")
 print ("Webpage OK...  "),
 
+restaurants = parsed_webpage.select(".lunch-item") # Picks out all the restaurants
+print ("Restaurants OK...  "),
+
 sc = SlackClient(lunchbot_token.lunchbot_token)
 print ("SlackClient ready to go...")
 
-counter = 10
+counter = 60
+all_restaurants = {"arken" : 0, "fänriken" : 1, "gado" : 2, "hanken" : 3, "karen up" : 4, "karen down" : 5}
 
 print ("Initializations DONE")
 
@@ -32,15 +36,39 @@ print ("Initializations DONE")
 def bot_talk(channel, message):
 	sc.api_call("chat.postMessage", channel=channel, text=message,
 	username='Lunchbot', icon_emoji=':fork_and_knife:')
+	
+# Print out all food for the day, without restaurant name
+def output_food(food, evt): 
+	for x in range(len(food)): 			# For 0 to amount of entries
+		fooditem = food[x].getText()	# Put current food into string for checking
+		if fooditem.endswith('*'):		# Check if fooditem has * at the end...
+			bot_talk(evt["channel"],fooditem[:-1])			# ...and remove it if it does
+		else:
+			bot_talk(evt["channel"],fooditem)			# ...and if not just print it as is
 
 def listen_to_message(evt):
 	#bot_talk(evt["channel"],"I heard something")
 	#bot_talk(evt["channel"],"It was " + evt["user"])
-	if evt["text"] == unicode("lunchbot gado"):
-		bot_talk(evt["channel"],"I heard something")
+	"""
 	if unicode("lunchbot") in evt["text"]:
+		bot_talk(evt["channel"],"I heard something")
+	if evt["text"] == unicode("lunchbot gado"):
 		bot_talk(evt["channel"],"I definitely heard something")
-
+	"""
+	message = evt["text"].encode('ascii', 'replace') 	# Convering to string datatype that I can deal with
+	message = message.lower() 							# make it all lower case
+	if "lunchbot" in message:							# Must we bother...?
+		print "Ok, we might need to deal with this"
+		words = message.split()							
+		if words[0] == "lunchbot" and len(words) == 2:	# Len might go up to 3, but for testing						
+			if words[1] in all_restaurants:
+				print "found the restaurant, it's " + words[1]
+				restaurant = words[1]
+				print restaurant
+				print all_restaurants[restaurant]
+				allfoods = restaurants[all_restaurants[restaurant]].select(".food")
+				output_food(allfoods, evt)
+	
 if sc.rtm_connect():
 	print 
 	print "Bot is listening."
